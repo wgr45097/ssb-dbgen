@@ -1,0 +1,28 @@
+#!/usr/bin/expect
+
+# Set a timeout
+set timeout 10
+
+# Start the dbgen command
+spawn ./dbgen -s 1 -T a
+
+# Loop to handle multiple prompts
+while {1} {
+    expect {
+        "Do you want to overwrite" {
+            # Send "y" for yes
+            send "y\r"
+            exp_continue
+        }
+        eof {
+            # End of file reached
+            break
+        }
+        timeout {
+            # Handle a timeout situation
+            puts "Timed out waiting for prompt."
+            break
+        }
+    }
+}
+
